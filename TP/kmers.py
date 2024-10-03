@@ -14,7 +14,18 @@ def kmer2str(val, k):
     str_val.reverse()
     return "".join(str_val)
 
+encode_nuc = { 'A': 0, 'C': 1, 'T': 2, 'G': 3 }
+
+def encode_kmer(seq, k):
+    kmer = 0
+    for nuc in seq[0:k]:
+        kmer <<= 2
+        kmer |= encode_nuc[nuc]
+    return kmer
 
 def stream_kmers(text, k):
-    # --- To complete ---
+    mask = ( 1 << 2 * (k - 1)) - 1
+
     pass
+
+## TO DO : encode kmer reverse complement
