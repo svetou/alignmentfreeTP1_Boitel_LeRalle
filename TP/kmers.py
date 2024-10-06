@@ -16,12 +16,24 @@ def kmer2str(val, k):
 
 encode_nuc = { 'A': 0, 'C': 1, 'T': 2, 'G': 3 }
 
-def encode_kmer(seq, k):
+def encode_kmer_positive_sense(seq, k):
     kmer = 0
     for nuc in seq[0:k]:
         kmer <<= 2
         kmer |= encode_nuc[nuc]
     return kmer
+
+complement_nuc = { 'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C' }
+
+def encode_kmer_reverse_complement(seq, k):
+    kmer = 0
+    for nuc in seq[-1:-k-1:-1]: # last k nucleotides of seq in reverse order
+        kmer <<= 2
+        kmer |= encode_nuc[complement_nuc[nuc]]
+    return kmer
+
+def encode_kmer(seq, k):
+    return min(encode_kmer_positive_sense(seq, k), encode_kmer_reverse_complement(seq, k))
 
 def stream_kmers(text, k):
     mask = ( 1 << 2 * (k - 1)) - 1
