@@ -16,12 +16,14 @@ for k in range(1, len(seq) + 1):
     encoded_stream = list(stream_kmers(seq, k))
     encoded_one_by_one = [encode_kmer(seq[i:i+k], k) for i in range(len(seq) + 1 - k)]
     assert encoded_stream == encoded_one_by_one # Python list equality => all elements equal
-
+    
+assert(list(stream_kmers("ATC", 42)) == [])
 
 # Jaccard distance testing
 ## Sanity checks
 seq1 = "ATATCGCAAAAAGAGAAATTCAGAGAGACTATATCGCAAAAAGAGAAATTCAGAGAGACT"
 assert jaccard([seq1], [seq1], 5) == 1.0
+assert jaccard([seq1], [""], 5) == 0.0
 seq2 = "GGGAGGGTGGCCGAGAAAAAAAAGTGTGAGC"
 assert jaccard([seq1], [seq2], 5) == jaccard([seq2], [seq1], 5)
 assert jaccard([seq1, seq1], [seq2, seq2], 5) == jaccard([seq1], [seq2], 5)

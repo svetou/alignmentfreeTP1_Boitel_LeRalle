@@ -36,6 +36,8 @@ def encode_kmer(seq, k):
     return min(encode_kmer_forward_sense(seq, k), encode_kmer_reverse_complement(seq, k))
 
 def stream_kmers(seq, k):
+    if len(seq) < k:
+        return # don't yield anything for sequences shorter than k
     mask_forward = ( 1 << (2 * (k - 1))) - 1
     # There can be inversions within the sequence so we cannot just compute the strand sense once,
     # but we need to keep track of forward and reverse kmers to yield the correct canonical ones
