@@ -35,7 +35,21 @@ def encode_kmer_reverse_complement(seq, k):
 def encode_kmer(seq, k):
     return min(encode_kmer_forward_sense(seq, k), encode_kmer_reverse_complement(seq, k))
 
-def stream_kmers(text, k):
-    mask = ( 1 << 2 * (k - 1)) - 1
+def stream_kmers(seq, k):
+    mask_forward = ( 1 << (2 * (k - 1))) - 1
+    # There can be inversions within the sequence so we cannot just compute the strand sense once,
+    # but we need to keep track of forward and reverse kmers to yield the correct canonical ones
+    kmer_forward = encode_kmer_forward_sense(seq, k)
+    kmer_reverse = encode_kmer_reverse_complement(seq, k)
+    for nuc in seq[k:]:
+        yield min(kmer_forward, kmer_reverse)
+        # TODO factorise with encode_forward function as an update_kmer inline?
+        kmer_forward &= mask_forward
+        kmer_forward <<= 2
+        kmer_forward |= encode_nuc[nuc]
 
-    pass
+        # no need to mask kmer_reverse as extra bits on the right will be discarded
+        kmer_reverse >>= 2
+        kmer_reverse |= (encode_nuc[complement_nuc[nuc]] << (2 * (k - 1)))
+    yield min(kmer_forward, kmer_reverse)
+
