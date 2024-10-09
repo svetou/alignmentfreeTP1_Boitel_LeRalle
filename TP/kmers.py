@@ -45,7 +45,6 @@ def stream_kmers(seq, k):
     kmer_reverse = encode_kmer_reverse_complement(seq, k)
     for nuc in seq[k:]:
         yield min(kmer_forward, kmer_reverse)
-        # TODO factorise with encode_forward function as an update_kmer inline?
         kmer_forward &= mask_forward
         kmer_forward <<= 2
         kmer_forward |= encode_nuc[nuc]
