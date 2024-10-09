@@ -41,10 +41,10 @@ Les fonctions qui manipulent les kmers sont implémentées dans `kmers.py`.
 `stream_kmers` streame les k-mers encodés d'une séquence, en réutilisant l'encodage du k-mer précédent selon l'optimisation décrite ci-dessus pour générer chaque encodage en temps constant.
 
 ### Distance de Jaccard
-La fonction `jaccard` du fichier principal du module calcule la distance de jaccard entre deux ensembles de séquences, A et B. Elle utilise nos fonctions sur les k-mers pour générer des streams efficaces de k-mers encodés canoniquement.
+La fonction `jaccard` du fichier principal du module calcule la distance de jaccard entre deux multi-ensembles de séquences, A et B. Elle utilise nos fonctions sur les k-mers pour générer des streams efficaces de k-mers encodés canoniquement.
 
 Pour calculer la distance de Jaccard, on commence par compter le nombre d'occurrences de chaque k-mer dans A, en streamant tous les k-mers de A et en mettant à jour un dictionnaire de comptes au fur et à mesure.
 
 On stream ensuite tous les k-mers de B ; à chaque fois que nous en trouvons un dans le dictionnaire, nous réduisons d'un son compte dans le dictionnaire et nous incrémentons une variable qui compte les k-mers en commun (intersection des multi-ensembles).
 
-Finalement, nous divisons le nombre d'intersections entre les multi-ensembles que nous avons comptées par leur union (la somme de leurs tailles respectives moins leur intersection), et nous obtenons la distance de Jaccard entre eux.
+Finalement, on divise le nombre de kmers dans l'intersection qu'on a comptés par l'union de A et B (la somme de leurs tailles respectives moins leur intersection), et on obtient la distance de Jaccard entre eux.
