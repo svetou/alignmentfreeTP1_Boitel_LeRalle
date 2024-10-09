@@ -38,14 +38,24 @@ if __name__ == "__main__":
     # Load all the files in a dictionary
     files = load_directory("data")
     k = 21
-    
+
     print("Computing Jaccard similarity for all pairs of samples")
     filenames = list(files.keys())
-    for i in range(len(files)):
-        for j in range(i+1, len(files)):
-            
-            # --- Complete here ---
-            # TODO what is there to complete here ?
+    distances = { i: { i: 1.0 } for i in range(len(filenames)) }
 
-            distance = jaccard(files[filenames[i]], files[filenames[j]], k)
-            print(filenames[i], filenames[j], distance)
+    for i in range(len(files)):
+        for j in range(i+1, len(files)):            
+            distances[i][j] = jaccard(files[filenames[i]], files[filenames[j]], k)
+            print(filenames[i], filenames[j], distances[i][j])
+
+    # Generate the Markdown similarity matrix for the report
+    print("Similarity matrix:")
+    filenames_no_ext = [ '.'.join(fn.split('.')[:-1]) for fn in filenames ]
+    max_col_length = max(len(fn) for fn in filenames_no_ext)
+    print("|  " + " " * max_col_length + "  |  " + "  |  ".join(filenames_no_ext) + "  |  ") # column names
+    print("|  " + ("-" * max_col_length + "  |  ") * (len(files) + 1)) # markdown ---- line
+    for i in range(len(files)):
+        print("|  " + filenames_no_ext[i], end="  | ") # row names
+        for j in range(len(files)):
+            print(f"{distances[min(i,j)][max(i,j)]: {max_col_length-4}.{max_col_length-2}f}", end="  | ")
+        print("")
