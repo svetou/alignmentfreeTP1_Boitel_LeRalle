@@ -48,3 +48,6 @@ Pour calculer la distance de Jaccard, on commence par compter le nombre d'occurr
 On stream ensuite tous les k-mers de B ; à chaque fois que nous en trouvons un dans le dictionnaire, nous réduisons d'un son compte dans le dictionnaire et nous incrémentons une variable qui compte les k-mers en commun (intersection des multi-ensembles).
 
 Finalement, on divise le nombre de kmers dans l'intersection qu'on a comptés par l'union de A et B (la somme de leurs tailles respectives moins leur intersection), et on obtient la distance de Jaccard entre eux.
+
+### Tests
+Des tests pour chaque fonction implémentée sont disponibles disponibles (`python tests_TP.py`). Ils testent des résultats calculés à la main et la cohérence des sorties d'une fonction à l'autre.
