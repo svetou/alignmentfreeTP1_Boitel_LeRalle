@@ -1,7 +1,9 @@
 # Alignment free - TP 1
 **Svetlana Le Ralle - Léo Boitel**
 
-## Matrice des distances
+## Matrice des distances de Jaccard
+
+Pour $k=21$ :
 
 |                   |  GCA_000069965.1  |  GCA_000005845.2  |  GCA_000013265.1  |  GCA_030271835.1  |  GCA_000008865.2  |  
 |  ---------------  |  ---------------  |  ---------------  |  ---------------  |  ---------------  |  ---------------  |  
@@ -11,7 +13,11 @@
 |  GCA_030271835.1  |  0.0311339446756  |  0.0025766983532  |  0.0024341020865  |  1.0000000000000  |  0.0023181149305  | 
 |  GCA_000008865.2  |  0.0023137873667  |  0.4364844461428  |  0.3070500187181  |  0.0023181149305  |  1.0000000000000  | 
 
-## Analyse biologique de la matrice des distances
+## Commentaire sur la matrice des distances
+
+On voit dans la matrice que les séquences GCA_000005845.2, GCA_000013265.1 et GCA_000008865.2 sont similaires deux à deux (30 à 40% de k-mers en commun). En revanche, les séquences GCA_000069965.1 et GCA_030271835.1 sont chacunes très isolées (moins de 1% de k-mers en commun avec les autres, 3% entre elles).
+
+Pour tenter d'expliquer ces résultats, nous avons cherché ces séquences dans l'European Nucleotide Archive. Les trois séquences proches proviennent toutes de souches d'E.Coli, ce qui explique leur forte similarité. Les séquences plus isolées viennent respectivement de Proteus appendicitidis et Proteus mirabilis - elles n'ont donc rien à voir avec E. Coli - et sont toutes deux dans le taxon Proteus, d'où leur légère similarité de 3% de k-mers.
 
 ## Description des méthodes
 ### Objectif
