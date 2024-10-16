@@ -1,6 +1,8 @@
-from TP.loading import load_directory
-from TP.kmers import stream_kmers, kmer2str, encode_kmer
+from loading import load_directory
+from kmers import stream_kmers, kmer2str, encode_kmer, hash_kmers, filter_smallests
 from sys import stderr
+import heapq
+import hashlib
 
 
 def jaccard(fileA, fileB, k):
@@ -27,8 +29,29 @@ def jaccard(fileA, fileB, k):
     if union_count == 0: # checking to avoid an error with empty/short sequences
         print("Warning: no k-mers to compare.", file=stderr)
         return 0
+    
+def jaccard2(sketch1, sketch2):
+    i, j = 0, 0
+    count_union = 0
+    count_intersection = 0
 
-    return intersection_count / union_count
+    while i < len(sketch1) and j < len(sketch2):
+        if sketch1[i] == sketch2[j]:
+            count_intersection += 1
+            count_union += 1
+            i += 1
+            j += 1
+        elif sketch1[i] < sketch2[j]:
+            count_union += 1
+            i += 1
+        else:
+            count_union += 1
+            j += 1
+
+    # Add remaining elements from either sketch
+    count_union += (len(sketch1) - i) + (len(sketch2) - j)
+
+    return count_intersection / count_union
 
 
 if __name__ == "__main__":
@@ -59,3 +82,5 @@ if __name__ == "__main__":
         for j in range(len(files)):
             print(f"{distances[min(i,j)][max(i,j)]: {max_col_length-4}.{max_col_length-2}f}", end="  | ")
         print("")
+
+    
