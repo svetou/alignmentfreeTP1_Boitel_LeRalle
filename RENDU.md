@@ -59,7 +59,7 @@ Finalement, on divise le nombre de kmers dans l'intersection qu'on a comptés pa
 Des tests pour chaque fonction implémentée sont disponibles disponibles (`python tests_TP.py`). Ils testent des résultats calculés à la main et la cohérence des sorties d'une fonction à l'autre.
 
 ## Seconde partie du TP
-Dans cette seconde partie, nous voulons réduire le temps de calcul ainsi que l'espace de stockage utilisé par notre code implémenté la dernière fois, dans le but d'une utilisation sur des séquences beaucoup plus longues. 
+Dans cette seconde partie, nous voulons réduire le temps de calcul ainsi que l'espace de stockage utilisé par notre code implémenté la dernière fois, dans le but d'une utilisation sur des séquences beaucoup plus longues. Nous utilisons donc des itérateurs pour manipuler les séquences d'origine (pour ne jamais les avoir en entier en mémoire d'un coup), et nous en dérivons des objets plus petits - des sketches.
 
 ### Création de sketches
 Nous crééons donc des sketches de nos kmers, c'est à dire des listes d'un certain nombre de plus petits kmers.
