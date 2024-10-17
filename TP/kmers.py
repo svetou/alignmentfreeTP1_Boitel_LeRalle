@@ -56,19 +56,15 @@ def stream_kmers(seq, k):
         kmer_reverse |= (encode_nuc[complement_nuc[nuc]] << (2 * (k - 1)))
     yield min(kmer_forward, kmer_reverse)
 
-def hash_kmers(kmer_list):
+def hash_kmers(kmers_it):
  
-    hashed_kmers = []
-    for kmer in kmer_list:
-        hashed_value = int(hashlib.md5(str(kmer).encode("ascii")).hexdigest(), 16)
-        hashed_kmers.append(hashed_value)
-    return hashed_kmers
+    for kmer in kmers_it:
+        yield int(hashlib.md5(str(kmer).encode("ascii")).hexdigest(), 16)
 
-def filter_smallests(kmers_list, s):
+def filter_smallests(kmers_it, s):
 
     # Generate all k-mers with our function stream_kmers
-    # kmers = list(stream_kmers(seq, k))
-    hashed_kmers = hash_kmers(kmers_list)
+    hashed_kmers = hash_kmers(kmers_it)
     heap = []
     
     for hashed_kmer in hashed_kmers:

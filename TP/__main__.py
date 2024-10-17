@@ -3,6 +3,7 @@ from TP.kmers import stream_kmers, kmer2str, encode_kmer, hash_kmers, filter_sma
 from sys import stderr
 import heapq
 import hashlib
+import itertools
 
 
 def jaccard(fileA, fileB, k):
@@ -70,9 +71,8 @@ if __name__ == "__main__":
     print("Precomputing sketches.") # To save time as we use the same file[i] in all i,j pairs for comparison
     sketches = []
     for i in range(len(files)):
-        kmers = [kmer for seq in files[filenames[i]] for kmer in list(stream_kmers(seq, k))]
-        # TODO use iterators
-        sketches.append(filter_smallests(kmers, s))
+        kmers_it = itertools.chain.from_iterable(stream_kmers(seq, k) for seq in files[filenames[i]])
+        sketches.append(filter_smallests(kmers_it, s))
         print(f"{filenames[i]} sketch computed.")
 
     print("Computing Jaccard similarity for all pairs of samples")
@@ -80,11 +80,6 @@ if __name__ == "__main__":
 
     for i in range(len(files)):
         for j in range(i+1, len(files)):            
-            #distances[i][j] = jaccard(files[filenames[i]], files[filenames[j]], k)
-            #print(files[filenames[i]])
-            #sketch1 = filter_smallests(files[filenames[i]][0],k,s) # TODO precompute those for each file
-            #print(sketch1)
-            #sketch2 = filter_smallests(files[filenames[j]][0],k,s) # TODO precompute those for each file
             distances[i][j] = jaccard2(sketches[i], sketches[j])
             print(filenames[i], filenames[j], distances[i][j])
 
