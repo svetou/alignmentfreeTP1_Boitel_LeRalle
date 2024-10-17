@@ -60,16 +60,15 @@ def hash_kmers(kmer_list):
  
     hashed_kmers = []
     for kmer in kmer_list:
-        kmer_str = kmer2str(kmer, len(kmer_list[0]))  # Convert kmer to string for hashing
-        hashed_value = int(hashlib.md5(kmer_str.encode()).hexdigest(), 16)
+        hashed_value = int(hashlib.md5(str(kmer).encode("ascii")).hexdigest(), 16)
         hashed_kmers.append(hashed_value)
     return hashed_kmers
 
-def filter_smallests(seq, k, s):
+def filter_smallests(kmers_list, s):
 
-    # Generate all k-mers with our function stram_kmers
-    kmers = list(stream_kmers(seq, k))
-    hashed_kmers = hash_kmers(kmers)
+    # Generate all k-mers with our function stream_kmers
+    # kmers = list(stream_kmers(seq, k))
+    hashed_kmers = hash_kmers(kmers_list)
     heap = []
     
     for hashed_kmer in hashed_kmers:

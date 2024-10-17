@@ -1,5 +1,5 @@
-from loading import load_directory
-from kmers import stream_kmers, kmer2str, encode_kmer, hash_kmers, filter_smallests
+from TP.loading import load_directory
+from TP.kmers import stream_kmers, kmer2str, encode_kmer, hash_kmers, filter_smallests
 from sys import stderr
 import heapq
 import hashlib
@@ -29,6 +29,8 @@ def jaccard(fileA, fileB, k):
     if union_count == 0: # checking to avoid an error with empty/short sequences
         print("Warning: no k-mers to compare.", file=stderr)
         return 0
+    
+    return intersection_count / union_count
     
 def jaccard2(sketch1, sketch2):
     i, j = 0, 0
@@ -61,14 +63,29 @@ if __name__ == "__main__":
     # Load all the files in a dictionary
     files = load_directory("data")
     k = 21
+    s = 10000 # number of elements in a sketch
+
+    filenames = list(files.keys())
+
+    print("Precomputing sketches.") # To save time as we use the same file[i] in all i,j pairs for comparison
+    sketches = []
+    for i in range(len(files)):
+        kmers = [kmer for seq in files[filenames[i]] for kmer in list(stream_kmers(seq, k))]
+        # TODO use iterators
+        sketches.append(filter_smallests(kmers, s))
+        print(f"{filenames[i]} sketch computed.")
 
     print("Computing Jaccard similarity for all pairs of samples")
-    filenames = list(files.keys())
     distances = { i: { i: 1.0 } for i in range(len(filenames)) }
 
     for i in range(len(files)):
         for j in range(i+1, len(files)):            
-            distances[i][j] = jaccard(files[filenames[i]], files[filenames[j]], k)
+            #distances[i][j] = jaccard(files[filenames[i]], files[filenames[j]], k)
+            #print(files[filenames[i]])
+            #sketch1 = filter_smallests(files[filenames[i]][0],k,s) # TODO precompute those for each file
+            #print(sketch1)
+            #sketch2 = filter_smallests(files[filenames[j]][0],k,s) # TODO precompute those for each file
+            distances[i][j] = jaccard2(sketches[i], sketches[j])
             print(filenames[i], filenames[j], distances[i][j])
 
     # Generate the Markdown similarity matrix for the report
